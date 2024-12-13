@@ -2,81 +2,74 @@ import { test } from '../fixtures/base.fixtures';
 import { expect } from '@playwright/test';
 import attachScreenshotToReport from '../utils/utils';
 import { faker } from '@faker-js/faker';
-import Filters from 'tests/components/filters.component';
 
-let filters: Filters;
+test('should be possible to choose country', async ({ appMagic: { topApps } }) => {
+  await topApps.filters.country.open();
+  await expect(topApps.filters.country.dropdown).toBeVisible();
 
-test.beforeEach(async ({ appMagic: { topApps } }) => {
-  filters = topApps.filters;
-});
-
-test('should be possible to choose country', async () => {
-  await filters.country.open();
-  await expect(filters.country.dropdown).toBeVisible();
-
-  const {countryButton, countryName} = await filters.country.getRandomCountry();
-  await filters.country.fillInput(countryName);
+  const {countryButton, countryName} = await topApps.filters.country.getRandomCountry();
+  await topApps.filters.country.fillInput(countryName);
   await countryButton.click();
 
   await expect.poll(async () => {
-    return await filters.country.getSelectedValue();
+    return await topApps.filters.country.getSelectedValue();
   }).toBe(countryName);
 });
 
-test('should be possible to clear input', async () => {
-  await filters.country.open();
-  await expect(filters.country.dropdown).toBeVisible();
+test('should be possible to clear input', async ({ appMagic: { topApps } }) => {
+  await topApps.filters.country.open();
+  await expect(topApps.filters.country.dropdown).toBeVisible();
 
-  await filters.country.fillInput('anyText');
+  await topApps.filters.country.fillInput('anyText');
   await expect.poll(async () => {
-    return await filters.country.getInputValue();
+    return await topApps.filters.country.getInputValue();
   }).toBe('anyText');
 
-  await filters.country.clearInput();
+  await topApps.filters.country.clearInput();
 
-  await expect(filters.country.input).toHaveAttribute('placeholder', filters.country.placeholderText);
+  await expect(topApps.filters.country.input).toHaveAttribute('placeholder', topApps.filters.country.placeholderText);
 });
 
-test('should show message when no country match filled value', async ({}, testInfo) => {
-  await filters.country.open();
-  await expect(filters.country.dropdown).toBeVisible();
+test('shows message when no country match filled value', async ({ appMagic: { topApps } }, testInfo) => {
+  await topApps.filters.country.open();
+  await expect(topApps.filters.country.dropdown).toBeVisible();
 
-  const countryList = await filters.country.getCountryList();
+  const countryList = await topApps.filters.country.getCountryList();
   const randomStr = faker.string.alphanumeric(10);
 
   const isNotCountry = countryList.every((item) => randomStr !== item);
-  await filters.country.fillInput(randomStr);
+  await topApps.filters.country.fillInput(randomStr);
 
   await expect.poll(async () => isNotCountry).toBeTruthy();
-  await expect(filters.country.dropdown).toContainText(filters.country.noDataMessage);
-  await attachScreenshotToReport(filters.country.dropdown, 'No data screenshot', testInfo);
+  await expect(topApps.filters.country.dropdown).toContainText(topApps.filters.country.noDataMessage);
+  await attachScreenshotToReport(topApps.filters.country.dropdown, 'No data screenshot', testInfo);
 });
 
-test('should be possible to close selector by mouse click()', async () => {
-  await filters.country.open();
-  await expect(filters.country.dropdown).toBeVisible();
+test('should be possible to close selector by mouse click()', async ({ appMagic: { topApps } }) => {
+  await topApps.filters.country.open();
+  await expect(topApps.filters.country.dropdown).toBeVisible();
 
-  await filters.country.closeByMouseClick();
+  await topApps.filters.country.closeByMouseClick();
 
-  await expect(filters.country.dropdown).toBeHidden();
+  await expect(topApps.filters.country.dropdown).toBeHidden();
 });
 
-test('should be possible to close selector by keyboard click()', async () => {
-  await filters.country.open();
-  await expect(filters.country.dropdown).toBeVisible();
+test('should be possible to close selector by keyboard click()', async ({ appMagic: { topApps } }) => {
+  await topApps.filters.country.open();
+  await expect(topApps.filters.country.dropdown).toBeVisible();
 
-  await filters.country.closeByKeyboardClick();
+  await topApps.filters.country.closeByKeyboardClick();
 
-  await expect(filters.country.dropdown).toBeHidden();
+  await expect(topApps.filters.country.dropdown).toBeHidden();
 });
 
-test("input should accept max 255 characters string", async () => {
-  await filters.country.open();
-  await expect(filters.country.dropdown).toBeVisible();
+test("input should accept max 255 characters string", async ({ appMagic: { topApps } }) => {
+  await topApps.filters.country.open();
+  await expect(topApps.filters.country.dropdown).toBeVisible();
   
   const strOfExceededLength = faker.string.alphanumeric({ length: { min: 256, max: 300 } });
-  await filters.country.fillInput(strOfExceededLength);
-  const inputValue = await filters.country.getInputValue();
+  await topApps.filters.country.fillInput(strOfExceededLength);
+  const inputValue = await topApps.filters.country.getInputValue();
 
   await expect.poll(async () => inputValue).toHaveLength(255);
   await expect.poll(async () => inputValue).toBe(strOfExceededLength.slice(0, 255));
