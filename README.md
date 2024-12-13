@@ -12,7 +12,7 @@ Write a test in JavaScript/Typescript using Playwright (the order of checks does
 - Close the selector (with one or several methods).
 - Check the maximum number of characters in the input (255).
 
-## How to install and run tests
+## How to run tests
 * Clone this repository.
 * Install required dependencies:
 ```
