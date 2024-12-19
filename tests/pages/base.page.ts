@@ -1,6 +1,6 @@
 import { type Page } from "@playwright/test";
 
-export default class BasePage {
+export default abstract class BasePage {
   readonly page: Page;
 
   constructor(page: Page) {
