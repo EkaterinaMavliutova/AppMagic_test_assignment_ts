@@ -1,6 +1,6 @@
-import { test } from '../fixtures/base.fixtures';
+import test from '../fixtures/base.fixtures';
 import { expect } from '@playwright/test';
-import attachScreenshotToReport from '../utils/utils';
+import { attachScreenshotToReport } from '../utils/utils';
 import { faker } from '@faker-js/faker';
 
 test('should be possible to choose country', async ({ appMagic: { topApps } }) => {

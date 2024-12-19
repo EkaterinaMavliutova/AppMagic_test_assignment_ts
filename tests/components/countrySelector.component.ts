@@ -1,7 +1,7 @@
 import { type Locator, type Page } from '@playwright/test';
 import { faker } from '@faker-js/faker';
 import BasePage from '../pages/base.page';
-import { step } from '../fixtures/base.fixtures';
+import { step } from '../utils/utils';
 
 export default class CountrySelector extends BasePage {
   protected className: string;
